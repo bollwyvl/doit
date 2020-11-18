@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+env:
+  PIP_DISABLE_PIP_VERSION_CHECK: 1
+  PYTHONIOENCODING: utf-8
+  PYTHONUNBUFFERED: 1
+
+jobs:
+  ci:
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu, macos, windows]
+        python-version: ["3.5", "3.6", "3.7", "3.8", "3.9", "pypy3"]
+        exclude: [{os: windows, python-version: pypy3}]
+    steps:
+      - if: ${{ matrix.os == "ubuntu" }}
+        run: sudo apt-get install strace
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with: {python-version: ${{ matrix.python-version }}}
+      - run: pip install -U pip wheel setuptools
+      - run: |
+          pip install .
+          pip install -r dev_requirements.txt python-coveralls
+      - run: pip freeze
+      - run: doit pyflakes
+      - run: py.test -vv
+      - if: ${{ matrix.os == "ubuntu" && matrix.python-version == "3.8" }}
+        run: |
+          doit coverage
+          coveralls
