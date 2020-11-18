@@ -13,7 +13,7 @@ def testUnsuportedPlatform(monkeypatch):
 
 
 platform = get_platform_system()
-@pytest.mark.skipif('platform not in FileModifyWatcher.supported_platforms')
+@pytest.mark.skipif('platform != "Linux"')
 class TestFileWatcher(object):
     def testInit(self, restore_cwd, tmpdir):
         dir1 = 'data3'
