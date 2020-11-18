@@ -34,4 +34,4 @@ jobs:
       - if: ${{ matrix.os == 'ubuntu' && matrix.python-version == '3.8' }}
         run: |
           doit coverage
-          coveralls
+          coveralls || echo "TODO: remove when run on a repo that is set up"

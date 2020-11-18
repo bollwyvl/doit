@@ -1,5 +1,6 @@
 import os
 import time
+import sys
 from dbm import whichdb
 
 import pytest
@@ -7,6 +8,9 @@ import pytest
 from doit.dependency import DbmDB, Dependency, MD5Checker
 from doit.task import Task
 from doit.cmd_base import get_loader
+
+# for windows, doesn't hurt anything otherwise
+sys.stdout.reconfigure(encoding='utf-8', errors='backslashreplace')
 
 
 def get_abspath(relativePath):
