@@ -18,12 +18,12 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu, macos, windows]
-        python-version: ["3.5", "3.6", "3.7", "3.8", "3.9", "pypy3"]
+        python-version: ['3.5', '3.6', '3.7', '3.8', '3.9', 'pypy3']
         exclude:
           - os: windows
             python-version: pypy3
     steps:
-      - if: ${{ matrix.os == "ubuntu" }}
+      - if: ${{ matrix.os == 'ubuntu' }}
         run: sudo apt-get install strace
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -36,7 +36,7 @@ jobs:
       - run: pip freeze
       - run: doit pyflakes
       - run: py.test -vv
-      - if: ${{ matrix.os == "ubuntu" && matrix.python-version == "3.8" }}
+      - if: ${{ matrix.os == 'ubuntu' && matrix.python-version == '3.8' }}
         run: |
           doit coverage
           coveralls
