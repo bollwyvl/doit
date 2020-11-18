@@ -9,9 +9,6 @@ from doit.dependency import DbmDB, Dependency, MD5Checker
 from doit.task import Task
 from doit.cmd_base import get_loader
 
-def is_pypy():
-    return '__pypy__' in sys.builtin_module_names
-
 
 def get_abspath(relativePath):
     """ return abs file path relative to this file"""
