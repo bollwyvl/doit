@@ -10,7 +10,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: sudo apt-get install hunspell-en-us
+      - run: sudo apt-get install hunspell hunspell-en-us
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
@@ -18,7 +18,7 @@ jobs:
       - run: pip install -U pip wheel setuptools
       - run: pip install . -r doc_requirements.txt -r dev_requirements.txt
       - run: pip freeze
-      - run: doit website
+      - run: doit -v2 website
       - uses: actions/upload-artifact@v2
         with:
           name: Website
