@@ -1,7 +1,6 @@
 import os
 import time
 from sys import executable
-import platform
 
 import pytest
 
