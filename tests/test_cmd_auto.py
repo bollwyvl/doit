@@ -12,9 +12,9 @@ from .conftest import CmdFactory
 
 
 # skip all tests in this module if platform not supported
+# https://github.com/pydoit/doit/issues/372
 platform = filewatch.get_platform_system()
-pytestmark = pytest.mark.skipif(
-    'platform not in filewatch.FileModifyWatcher.supported_platforms')
+pytestmark = pytest.mark.skipif('platform not in "Linux"')
 
 
 class TestFindFileDeps(object):

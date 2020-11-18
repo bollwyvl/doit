@@ -12,6 +12,8 @@ def testUnsuportedPlatform(monkeypatch):
     pytest.raises(Exception, FileModifyWatcher, [])
 
 
+# Lingering issues on OSX:
+# https://github.com/pydoit/doit/issues/372
 platform = get_platform_system()
 @pytest.mark.skipif('platform != "Linux"')
 class TestFileWatcher(object):
