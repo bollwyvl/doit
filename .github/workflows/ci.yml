@@ -31,6 +31,9 @@ jobs:
       - run: pip freeze
       - run: doit pyflakes
       - run: py.test -vv
+        env:
+          PYTHONIOENCODING: utf-8
+          PYTHONLEGACYWINDOWSIOENCODING: utf-8
       - if: ${{ matrix.os == 'ubuntu' && matrix.python-version == '3.8' }}
         run: |
           doit coverage
