@@ -7,7 +7,7 @@ on:
     branches: [master, test]
 
 jobs:
-  ci:
+  test:
     runs-on: ${{ matrix.os }}-latest
     strategy:
       fail-fast: false
@@ -25,10 +25,9 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - run: pip install -U pip wheel setuptools
-      - run: |
-          pip install .
-          pip install -r dev_requirements.txt python-coveralls
+      - run: pip install . -r dev_requirements.txt python-coveralls
       - run: pip freeze
+      - run: pip check
       - run: doit pyflakes
       - run: py.test -vv
         env:

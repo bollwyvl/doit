@@ -7,7 +7,7 @@ on:
     branches: [master, test]
 
 jobs:
-  ci:
+  build:
     runs-on: ubuntu-latest
     steps:
       - run: sudo apt-get install hunspell-en-us
@@ -16,9 +16,7 @@ jobs:
         with:
           python-version: "3.8"
       - run: pip install -U pip wheel setuptools
-      - run: |
-          pip install .
-          pip install -r doc_requirements.txt
+      - run: pip install . -r doc_requirements.txt -r dev_requirements.txt
       - run: pip freeze
       - run: doit website
       - uses: actions/upload-artifact@v2
