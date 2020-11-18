@@ -1,0 +1,27 @@
+name: Website
+
+on:
+  push:
+    branches: [master, test]
+  pull_request:
+    branches: [master, test]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - run: sudo apt-get install hunspell-en-us
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install -U pip wheel setuptools
+      - run: |
+          pip install .
+          pip install -r doc_requirements.txt
+      - run: pip freeze
+      - run: doit website
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Website
+          path: ./doc/_build
