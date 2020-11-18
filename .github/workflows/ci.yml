@@ -25,14 +25,20 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - run: pip install -U pip wheel setuptools
+      - id: pip-cache
+        run: echo "::set-output name=dir::$(pip cache dir)"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: ${{ runner.os }}-pip-${{ matrix.python-version }}-{{ hashFiles('setup.py', 'dev_requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-${{ matrix.python-version }}-
+            ${{ runner.os }}-pip-
       - run: pip install . -r dev_requirements.txt python-coveralls
       - run: pip freeze
       - run: pip check
       - run: doit pyflakes
       - run: py.test -vv
-        env:
-          PYTHONIOENCODING: utf-8
-          PYTHONLEGACYWINDOWSIOENCODING: utf-8
       - if: ${{ matrix.os == 'ubuntu' && matrix.python-version == '3.8' }}
         run: |
           doit coverage
