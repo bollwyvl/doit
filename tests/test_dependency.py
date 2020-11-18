@@ -1,6 +1,7 @@
 import os
 import time
 from sys import executable
+import platform
 
 import pytest
 
@@ -10,11 +11,12 @@ from doit.dependency import DbmDB, JsonDB, SqliteDB, Dependency
 from doit.dependency import DatabaseException, UptodateCalculator
 from doit.dependency import FileChangedChecker, MD5Checker, TimestampChecker
 from doit.dependency import DependencyStatus
-from .conftest import get_abspath, dep_manager_fixture
+from .conftest import get_abspath, dep_manager_fixture, is_pypy
 
 # path to test folder
 TEST_PATH = os.path.dirname(__file__)
 PROGRAM = "%s %s/sample_process.py" % (executable, TEST_PATH)
+
 
 
 def test_unicode_md5():
@@ -58,7 +60,13 @@ def test_sqlite_import():
 # test parametrization, execute tests for all DB backends.
 # create a separate fixture to be used only by this module
 # because only here it is required to test with all backends
-@pytest.fixture(params=[JsonDB, DbmDB, SqliteDB])
+BACKENDS = [JsonDB, DbmDB, SqliteDB]
+
+if is_pypy() and platform.system() == "Darwin":
+    # appears to not clean up properly
+    BACKENDS.remove(DbmDB)
+
+@pytest.fixture(params=BACKENDS)
 def pdep_manager(request, tmp_path_factory):
     return dep_manager_fixture(request, request.param, tmp_path_factory)
 
